@@ -3,64 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic Tac Toe OOP</title>
+    <title>Tic Tac Toe</title>
     <style>
-      :root[data-theme="light"] {
-        --bg: #f0f0f0;
-        --fg: #222;
-        --accent: #4caf50;
-        --win: #4caf50;
-        --lose: #f44336;
-      }
-      :root[data-theme="dark"] {
-        --bg: #121212;
-        --fg: #eee;
-        --accent: #90caf9;
-        --win: #81c784;
-        --lose: #e57373;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        background-color: var(--bg);
-        color: var(--fg);
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
+      .game-wrapper-sd {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
         padding: 1rem;
+        font-family: Arial, sans-serif;
       }
-      h1 {
+
+      .head-sd {
         margin-bottom: 1rem;
+        text-align: center !important;
       }
-      .mode-buttons,
-      .difficulty-buttons,
-      .controls,
-      .scoreboard {
-        margin: 1rem 0;
-        display: flex;
-        gap: 0.4rem;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      button {
-        padding: 0.5rem 1rem;
-        background-color: var(--accent);
-        border: none;
-        color: #fff;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: transform 0.2s;
-      }
-      button:hover {
-        transform: scale(1.05);
-      }
+
       #board {
         display: grid;
-        grid-template-columns: repeat(3, 100px);
+        grid-template-columns: repeat(3, 150px);
         grid-template-rows: repeat(3, 100px);
         gap: 5px;
+        border: 2px solid #ccc;
+        background-color: #fafafa;
       }
+
       .cell {
         display: flex;
         justify-content: center;
@@ -71,30 +37,143 @@
         cursor: pointer;
         transition: background-color 0.3s;
       }
+
       .cell.played {
         background-color: #ddd;
       }
+      .mode-buttons,
+      .difficulty-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
       .cell.win {
-        background-color: var(--win);
+        background-color: #4caf50;
         color: #fff;
         animation: pulse 0.6s ease infinite;
       }
+
       .cell.lose {
-        background-color: var(--lose);
+        background-color: #f44336;
         color: #fff;
         animation: shake 0.4s ease infinite;
       }
+
+      /* Layout container: board on left, sidebar-sd on right */
+      .game-layout {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        align-items: flex-start;
+      }
+
+      /* sidebar-sd on right */
+      .sidebar-sd {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        min-width: 200px;
+      }
+
+      #status {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+
+      /* controls-sd buttons stacked vertically */
+      .controls-sd {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+
+      /* Buttons style */
+      .btn-sd {
+        padding: 0.6rem 1rem;
+        background-color: #4da1a9;
+        border: none;
+        color: white;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+        font-size: 1rem;
+      }
+
+      .btn-sd:hover {
+        transform: scale(1.05);
+      }
+      .more-btn {
+        padding: 0.6rem 1rem;
+        background-color: #7c4585;
+        text-decoration: none;
+        border: none;
+        color: white;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+        font-size: 1rem;
+      }
+      .more-btn:hover {
+        transform: scale(1.05);
+        background-color: #c95792;
+      }
+      /* Scoreboard styling */
+      .scoreboard {
+        background-color: #f5f5f5;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+        font-weight: bold;
+        text-align: center;
+      }
+
+      /* Responsive for smaller screens: stack vertically */
+      @media (max-width: 600px) {
+        .game-layout {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        #board {
+          grid-template-columns: repeat(3, 100px);
+          grid-template-rows: repeat(3, 80px);
+        }
+
+        .cell {
+          font-size: 1.5rem;
+        }
+
+        .sidebar-sd {
+          width: 100%;
+          min-width: unset;
+          margin-top: 1rem;
+        }
+
+        .controls-sd {
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+      }
+
+      /* Animations */
       @keyframes pulse {
-        0% {
+        0%,
+        100% {
           transform: scale(1);
         }
         50% {
           transform: scale(1.1);
         }
-        100% {
-          transform: scale(1);
-        }
       }
+
       @keyframes shake {
         0%,
         100% {
@@ -107,45 +186,66 @@
           transform: translateX(3px);
         }
       }
-      @media (max-width: 400px) {
-        #board {
-          grid-template-columns: repeat(3, 100px);
-          grid-template-rows: repeat(3, 80px);
-        }
-        .cell {
-          font-size: 1.5rem;
-        }
-      }
     </style>
   </head>
   <body>
-    <h1 style="text-decoration: underline">Tic Tac Toe</h1>
-    <div id="modeSelect" class="mode-buttons">
-      <button onclick="startGame('pvp')">Player vs Player</button>
-      <button onclick="chooseDifficulty()">Player vs Computer</button>
-    </div>
-    <div id="difficultySelect" class="difficulty-buttons" style="display: none">
-      <button onclick="startGameWithDifficulty('easy')">Easy</button>
-      <button onclick="startGameWithDifficulty('medium')">Medium</button>
-      <button onclick="startGameWithDifficulty('hard')">Hard</button>
-    </div>
-    <div id="gameArea" style="display: none">
-      <div id="board"></div>
-      <p id="status">Current turn: X</p>
-      <div class="controls">
-        <button onclick="restartGame()">Restart</button>
-        <button onclick="resetStats()">Reset Stats</button>
-        <button onclick="toggleTheme()">Dark/Light</button>
-      </div>
-      <div class="controls">
-        <button onclick="goBackToMenu()" class="back-btn">Back to Menu</button>
-        <!-- Back Button -->
+    <div class="game-wrapper-sd">
+      <h1 class="head-sd">Tic Tac Toe</h1>
+
+      <div id="modeSelect" class="mode-buttons">
+        <button onclick="startGame('pvp')" class="btn-sd">
+          Player vs Player
+        </button>
+        <button onclick="chooseDifficulty()" class="btn-sd">
+          Player vs Computer
+        </button>
+        <!-- <a
+          href="https://sanmarg.in/sanmarg-games"
+          class="more-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+          >More Games</a
+        > -->
       </div>
 
-      <div class="scoreboard">
-        <p id="playerXWins">Player X Wins: 0</p>
-        <p id="playerOWins">Player O/Computer Wins: 0</p>
-        <p id="draws">Draws: 0</p>
+      <div
+        id="difficultySelect"
+        class="difficulty-buttons"
+        style="display: none"
+      >
+        <button onclick="startGameWithDifficulty('easy')" class="btn-sd">
+          Easy
+        </button>
+        <button onclick="startGameWithDifficulty('medium')" class="btn-sd">
+          Medium
+        </button>
+        <button onclick="startGameWithDifficulty('hard')" class="btn-sd">
+          Hard
+        </button>
+      </div>
+
+      <div id="gameArea" style="display: none">
+        <div class="game-layout">
+          <div id="board"></div>
+
+          <div class="sidebar-sd-sd">
+            <p id="status">Current turn: X</p>
+
+            <div class="controls-sd">
+              <button onclick="restartGame()" class="btn-sd">Restart</button>
+              <button onclick="resetStats()" class="btn-sd">Reset Stats</button>
+              <button onclick="goBackToMenu()" class="btn-sd">
+                Back to Menu
+              </button>
+            </div>
+
+            <div class="scoreboard">
+              <p id="playerXWins">Player X Wins: 0</p>
+              <p id="playerOWins">Player O/Computer Wins: 0</p>
+              <p id="draws">Draws: 0</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -223,7 +323,7 @@
               this.getWinningMove("X") ||
               this.getRandomMove();
           } else {
-            index = this.minimax(this.board, "O").index;
+            index = this.minimax(this.board.slice(), "O").index;
           }
           this.makeMove(index);
         }
@@ -239,7 +339,7 @@
           for (let i = 0; i < this.board.length; i++) {
             if (!this.board[i]) {
               this.board[i] = player;
-              if (this.checkWinner() === player) {
+              if (this.getWinner(this.board) === player) {
                 this.board[i] = null;
                 return i;
               }
@@ -249,24 +349,37 @@
           return null;
         }
 
+        getWinner(board) {
+          for (let [a, b, c] of this.winningCombinations) {
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+              return board[a];
+            }
+          }
+          return null;
+        }
+
         minimax(newBoard, player) {
           const availSpots = newBoard
             .map((v, i) => (v === null ? i : null))
             .filter((v) => v !== null);
+
           const opponent = player === "O" ? "X" : "O";
-          const winner = this.checkWinnerMinimax(newBoard);
+          const winner = this.getWinner(newBoard);
 
           if (winner === "X") return { score: -10 };
           if (winner === "O") return { score: 10 };
           if (availSpots.length === 0) return { score: 0 };
 
           const moves = [];
+
           for (let i of availSpots) {
             let move = {};
             move.index = i;
             newBoard[i] = player;
+
             const result = this.minimax(newBoard, opponent);
             move.score = result.score;
+
             newBoard[i] = null;
             moves.push(move);
           }
@@ -289,6 +402,7 @@
               }
             });
           }
+
           return bestMove;
         }
 
@@ -310,26 +424,70 @@
           return null;
         }
 
-        checkWinnerMinimax(board) {
-          for (let [a, b, c] of this.winningCombinations) {
-            if (board[a] && board[a] === board[b] && board[a] === board[c])
-              return board[a];
-          }
-          return null;
-        }
-
         endGame(result) {
           this.isGameOver = true;
-          const status = document.getElementById("status");
-          if (result === "draw") {
-            status.textContent = "It's a draw!";
+
+          let title = "";
+          let message = "";
+
+          const isWin = this.mode === "pvc" && result === "X";
+          const isLose = this.mode === "pvc" && result === "O";
+          const isDraw = result === "draw";
+
+          if (isDraw) {
+            title = "It's a Draw!";
+            message = "Nobody won this round.";
             this.scores.draws++;
+          } else if (isWin) {
+            title = "You Win!";
+            message = "Great job!";
+            this.scores.playerX++;
+          } else if (isLose) {
+            title = "You Lose!";
+            message = "Better luck next time.";
+            this.scores.playerO++;
           } else {
-            status.textContent = `${result} wins!`;
+            // PvP Mode
+            title = `${result} Wins!`;
+            message = `Player ${result} has won the game.`;
             result === "X" ? this.scores.playerX++ : this.scores.playerO++;
           }
+
           this.saveScores();
           this.updateScoreboard();
+
+          // 🎉 Trigger confetti only if player wins (PvC) or any win in PvP
+          if (isWin || (this.mode === "pvp" && !isDraw)) {
+            confetti({
+              particleCount: 150,
+              spread: 100,
+              origin: { y: 0.6 },
+            });
+          }
+
+          Swal.fire({
+            icon: isDraw
+              ? "info"
+              : isWin
+              ? "success"
+              : isLose
+              ? "error"
+              : "success",
+            title: title,
+            text: message,
+            showCancelButton: true,
+            confirmButtonText: "Play Again",
+            cancelButtonText: "Main Page",
+            reverseButtons: true,
+            confirmButtonColor: "#7886C7",
+            cancelButtonColor: "#71BBB2",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.restart();
+            } else {
+              goBackToMenu();
+            }
+          });
         }
 
         switchPlayer() {
@@ -420,22 +578,14 @@
         game.updateScoreboard();
       }
 
-      function toggleTheme() {
-        const html = document.documentElement;
-        html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-      }
-
       function goBackToMenu() {
-        // Hide game area and difficulty selection screen
         document.getElementById("gameArea").style.display = "none";
         document.getElementById("difficultySelect").style.display = "none";
-
-        // Show the main menu (mode selection)
         document.getElementById("modeSelect").style.display = "flex";
-
-        // Optionally reset the game state (clear game object)
         game = null;
       }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   </body>
 </html>
